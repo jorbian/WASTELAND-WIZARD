@@ -1,11 +1,17 @@
 #!/usr/bin/env python3
+#
+# Structuring the code this way allows the project's code base to be more
+# easily changed. You can change how you treat the data structure (like if
+# you and to use JSON vs YAML or XML or something else) AND rewrite savedat.hpp
+# at exactly the same time. Plus gives us a chance to model some of the logica
+# that will have to be carried over into C++.
 
 import binascii
 import os
 
 from pathlib import Path
 
-test_path = "/home/boller/Documents/GitHub/WASTELAND WIZARD/data/test_data/third_party/Fallout1/Saves 1 to 10/SLOT01/SAVE.DAT"
+test_path = "/home/boller/Documents/GitHub/WASTELAND WIZARD/data/test_files/third_party/Fallout2/Saves 51 to 60/SLOT01/SAVE.DAT"
 
 class SaveDAT:
     """CLASS OBJECT TO MANIPULATE 'SAVE.DAT' FILE FOR TESTING AND DEBUG PURPOSES"""
@@ -35,14 +41,34 @@ class SaveDAT:
         )
 
         @classmethod
-        def export_to_json(cls, filename="", filter=(lambda x: x)):
+        def export_to_json(cls, filename=""):
             """CREATE A JSON FILE TO SAVE THE DATA STRUCTURE"""
+            import json
+
             json_file = filename if filename else (
                 "./{}_{}.json".format(
                     Path(__file__).stem,
                     cls.__name__.lower()
                 )
             )
+            needed_data = cls.filter_data()
+
+            Path(json_file).write_text(
+                json.dumps(
+                    needed_data,
+                    indent=4,
+                    sort_keys=True
+                )
+            )
+
+        @classmethod
+        def filter_data(cls):
+            """GET DATA READY FOR EXPORT AS JSON, SAVEDAT.HPP OR WHATEVER"""
+            return dict([(y[0], [vars(z) for z in y[1]] )for y in [x for x in vars(cls).items() if (
+                        ("_" not in x[0]) and
+                        ("class" not in str(x[1])) and
+                        (not callable(x[1]))
+            )]])
 
 
     class File:
@@ -69,5 +95,17 @@ class SaveDAT:
 
             return (read_bytes)
 
+        def print_file_header(self):
+            print(self.file_obj.resolve())
 
-SaveDAT.Structure.export_to_json()
+            for field in SaveDAT.Structure.header:
+                field_data = binascii.hexlify(
+                    self.read_n_bytes(field.size, field.offset), " ", 1
+                )
+                print(f"{field.name}: ", end="")
+                print(field_data)
+
+            print()
+
+[SaveDAT.File(x).print_file_header() for x in Path("..").rglob('*.DAT')]
+
