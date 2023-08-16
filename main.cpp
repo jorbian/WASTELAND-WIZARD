@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <cstring>
 
 int main() {
     std::ifstream hexFile("SAVE.DAT", std::ios::binary);
@@ -11,10 +12,10 @@ int main() {
     }
 
     const int patternLength = 4; // Adjust to match the length of your pattern
-    std::string desiredPattern = "0 0 46 50"; // Example pattern as a string
+    const char desiredPattern[5] = "\x00\x00\x46\x50";  // Example pattern as a string
 
     bool patternFound = false;
-    std::streampos offset = 0x08c;
+    std::streampos offset = 0;
 
     while (!hexFile.eof()) {
         hexFile.seekg(offset);
@@ -32,8 +33,13 @@ int main() {
         }
         std::cout << std::endl;
 
-        if (std::string(readData, patternLength) == desiredPattern) {
+        if (memcmp(readData, desiredPattern, 4) == 0) {
             patternFound = true;
+            std::cout << "Read data: ";
+        for (int i = 0; i < patternLength; ++i) {
+            std::cout << static_cast<int>(readData[i]) << " ";
+        }
+        std::cout << std::endl;
             offset += patternLength; // Move offset to the position after the pattern
             break;
         }
