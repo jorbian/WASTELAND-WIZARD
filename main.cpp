@@ -17,7 +17,7 @@ int main() {
 
     bool patternFound = false;
     std::streampos offset = 0;
-    int strength = 0; // Variable to store strength value
+    int Strength = 0, Perception = 0, Endurance = 0, Charisma = 0, Intelligence = 0, Agility = 0, Luck = 0; // Variable to store strength value
 
     while (!hexFile.eof()) {
         hexFile.seekg(offset);
@@ -48,44 +48,44 @@ int main() {
         stroffset = offset;
         std::cout << "Strength Offset set to " << stroffset << std::endl;
         hexFile.read(newValue, 1);
-        strength = static_cast<int>(newValue[0]);
-        std::cout << "Strength value: " << strength << std::endl;
+        Strength = static_cast<int>(newValue[0]);
+        std::cout << "Strength value: " << Strength << std::endl;
         hexFile.seekg(static_cast<std::streamoff>(stroffset) + 4); // Move to the new offset + 4 bytes
         peroffset = stroffset += 4;
         std::cout << "Perception Offset set to " << peroffset << std::endl;
         hexFile.read(newValue, 1);
-        strength = static_cast<int>(newValue[0]);
-        std::cout << "Perception value: " << strength << std::endl;
+        Perception = static_cast<int>(newValue[0]);
+        std::cout << "Perception value: " << Perception << std::endl;
         hexFile.seekg(static_cast<std::streamoff>(peroffset) + 4); // Move to the new offset + 4 bytes
         endoffset = peroffset += 4;
         std::cout << "Endurance Offset set to " << endoffset << std::endl;
         hexFile.read(newValue, 1);
-        strength = static_cast<int>(newValue[0]);
-        std::cout << "Endurance value: " << strength << std::endl;
+        Endurance = static_cast<int>(newValue[0]);
+        std::cout << "Endurance value: " << Endurance << std::endl;
         hexFile.seekg(static_cast<std::streamoff>(endoffset) + 4); // Move to the new offset + 4 bytes
         charoffset = endoffset += 4;
         std::cout << "Charisma Offset set to " << charoffset << std::endl;
         hexFile.read(newValue, 1);
-        strength = static_cast<int>(newValue[0]);
-        std::cout << "Charisma value: " << strength << std::endl;
+        Charisma = static_cast<int>(newValue[0]);
+        std::cout << "Charisma value: " << Charisma << std::endl;
         hexFile.seekg(static_cast<std::streamoff>(charoffset) + 4); // Move to the new offset + 4 bytes
         intoffset = charoffset += 4;
         std::cout << "Intelligence Offset set to " << intoffset << std::endl;
         hexFile.read(newValue, 1);
-        strength = static_cast<int>(newValue[0]);
-        std::cout << "Intelligence value: " << strength << std::endl;
+        Intelligence = static_cast<int>(newValue[0]);
+        std::cout << "Intelligence value: " << Intelligence << std::endl;
         hexFile.seekg(static_cast<std::streamoff>(intoffset) + 4); // Move to the new offset + 4 bytes
         agiloffset = intoffset += 4;
         std::cout << "Agility Offset set to " << agiloffset << std::endl;
         hexFile.read(newValue, 1);
-        strength = static_cast<int>(newValue[0]);
-        std::cout << "Agility value: " << strength << std::endl;
+        Agility = static_cast<int>(newValue[0]);
+        std::cout << "Agility value: " << Agility << std::endl;
         hexFile.seekg(static_cast<std::streamoff>(agiloffset) + 4); // Move to the new offset + 4 bytes
         luckoffset = agiloffset += 4;
         std::cout << "Luck Offset set to " << luckoffset << std::endl;
         hexFile.read(newValue, 1);
-        strength = static_cast<int>(newValue[0]);
-        std::cout << "Luck value: " << strength << std::endl;
+        Luck = static_cast<int>(newValue[0]);
+        std::cout << "Luck value: " << Luck << std::endl;
     } else {
         std::cout << "Pattern not found." << std::endl;
         std::cout << "Desired pattern: " << desiredPattern << std::endl;
@@ -95,4 +95,3 @@ int main() {
 
     return 0;
 }
-
