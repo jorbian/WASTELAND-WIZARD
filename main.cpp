@@ -3,6 +3,19 @@
 #include <string>
 #include <cstring>
 
+void ModifyBaseStat(const char* filename, std::streampos offset, int newValue) {
+    std::fstream hexFile(filename, std::ios::in | std::ios::out | std::ios::binary);
+
+    if (!hexFile.is_open()) {
+        std::cerr << "Failed to open the file." << std::endl;
+        return;
+    }
+
+    hexFile.seekp(offset);
+    hexFile.write(reinterpret_cast<const char*>(&newValue), 1);
+
+    hexFile.close();
+}
 
 int main() {
     std::ifstream hexFile("SAVE.DAT", std::ios::binary);
